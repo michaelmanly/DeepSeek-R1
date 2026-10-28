@@ -179,17 +179,6 @@ We also provide OpenAI-Compatible API at DeepSeek Platform: [platform.deepseek.c
 
 ## 6. How to Run Locally
 
-### Optional: serve with Badgr on your own GPU
-
-If you already have a working serving script for `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B`, [Badgr](https://aibadgr.com) can manage the service on **your own connected GPU (BYO GPU)**. Supported rented cloud GPUs are another option; this is a third-party workflow, not an official deployment method.
-
-```bash
-badgr node connect --name gpu-box-1
-badgr serve ./start-vllm.sh --target gpu-box-1
-```
-
-`start-vllm.sh` is your own model-specific, tested launch script—not a script bundled with this repository. This example targets the 32B distill, not full DeepSeek-R1; confirm GPU memory and runtime flags. This example has not been end-to-end tested for this model.
-
 ### DeepSeek-R1 Models
 
 Please visit [DeepSeek-V3](https://github.com/deepseek-ai/DeepSeek-V3) repo for more information about running DeepSeek-R1 locally.
@@ -208,6 +197,14 @@ You can also easily start a service using [SGLang](https://github.com/sgl-projec
 
 ```bash
 python3 -m sglang.launch_server --model deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --trust-remote-code --tp 2
+```
+
+Optionally, [Badgr](https://aibadgr.com) (a third-party tool, not affiliated with DeepSeek; disclosure: I'm building it) can run the same vLLM command as a managed service on a GPU machine you already own. It needs Linux, Docker and NVIDIA GPUs, and the machine needs at least as many GPUs as `--tensor-parallel-size`:
+
+```bash
+badgr node connect --name gpu-box-1
+badgr serve --target gpu-box-1 --image vllm/vllm-openai:latest --port 8000 --persistent \
+  --cmd "vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-32B --tensor-parallel-size 2 --max-model-len 32768 --enforce-eager --host 0.0.0.0 --port 8000"
 ```
 
 ### Usage Recommendations
