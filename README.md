@@ -177,6 +177,17 @@ You can chat with DeepSeek-R1 on DeepSeek's official website: [chat.deepseek.com
 
 We also provide OpenAI-Compatible API at DeepSeek Platform: [platform.deepseek.com](https://platform.deepseek.com/)
 
+### Optional GPU serving via Badgr (third-party)
+
+For users who already have a working model-serving setup, [Badgr](https://aibadgr.com) can manage a serving process on a connected GPU machine. This is an optional community workflow, not an official model deployment method.
+
+```bash
+badgr node connect --name gpu-box-1
+badgr serve ./start-vllm.sh --target gpu-box-1
+```
+
+Here `start-vllm.sh` is **your own tested launch script** for `deepseek-ai/DeepSeek-R1-Distill-Qwen-32B`, with the model-specific vLLM flags from this project's serving guidance. Badgr also offers cloud GPU capacity; select a supported cloud target according to its CLI documentation. This is the smaller 32B distilled checkpoint, not the full 671B DeepSeek-R1 model. Check available VRAM before launching. These commands have not been end-to-end tested as part of this documentation change.
+
 ## 6. How to Run Locally
 
 ### DeepSeek-R1 Models
